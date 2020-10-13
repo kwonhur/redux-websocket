@@ -41,7 +41,7 @@ export default (rawOptions?: Options): Middleware => {
 
   // Middleware function.
   return (store: MiddlewareAPI) => (next) => (action: Action) => {
-    const { dispatch } = store;
+    const { dispatch, getState } = store;
     const { type: actionType } = action;
 
     // Check if action type matches prefix
@@ -53,7 +53,7 @@ export default (rawOptions?: Options): Middleware => {
         // eslint-disable-next-line no-param-reassign
         action.meta.timestamp = dateSerializer(action.meta.timestamp);
       }
-
+      action.meta.channelName = getState().users.channelName;
       if (handler) {
         try {
           handler(store, action);
